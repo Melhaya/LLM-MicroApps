@@ -408,12 +408,13 @@ def main(config):
     PREFERRED_LLM = config.get('PREFERRED_LLM', 'openai')
     SYSTEM_PROMPT = config.get('SYSTEM_PROMPT', '')
 
-    hide_github_style = """
-    <style>
-    a[href*="github.com"] {visibility: hidden;}
-    </style>
+    # Add custom CSS to hide the GitHub icon
+    hide_github_icon = """
+    #GithubIcon {
+      visibility: hidden;
+    }
     """
-    st.markdown(hide_github_style, unsafe_allow_html=True)
+    st.markdown(hide_github_icon, unsafe_allow_html=True)
 
     # Apply the page configuration
     if PAGE_CONFIG:
