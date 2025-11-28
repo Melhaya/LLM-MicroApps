@@ -41,9 +41,9 @@ This tool lets educators, instructional designers, and trainers quickly create *
 - 💬 **Chat history**
     - The sidebar keeps track of user prompts and AI responses across phases.
 
----
+--- 
 
-## 🗂 Project Structure
+## 📁 Project Structure
 
 A minimal overview of the key files:
 
@@ -56,3 +56,30 @@ A minimal overview of the key files:
 │   └── llm_config.py         # Model registry and default parameters
 ├── requirements.txt
 └── README.md
+```
+
+--- 
+
+## 📖 How to Cite
+
+If you use this tool in your teaching, research, or publications, please cite the following paper:
+
+Elhayany, M. *AI-Powered MicroApps for Online Assessments: Impacts on Efficiency, Quality, and Future Directions.*  
+Available at: https://ieeexplore.ieee.org/abstract/document/10748039
+
+### BibTeX
+
+```bibtex
+@INPROCEEDINGS{elhayany2024aipoweredmicroapps,
+  author={Elhayany, Mohamed and Swope, John and Rushe, Shannon and Meinel, Christoph},
+  booktitle={2024 IEEE Digital Education and MOOCS Conference (DEMOcon)}, 
+  title={AI-Powered MicroApps for Online Assessments: Impacts on Efficiency, Quality, and Future Directions}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-6},
+  keywords={Technological innovation;Computer aided instruction;Electronic learning;Generative AI;Chatbots;Generators;Artificial intelligence;AI-Powered Micro-Apps;GPT-3.5;Artificial Intelligence;Online Education;Assessment},
+  doi={10.1109/DEMOcon63027.2024.10748039}}
+```
+
+---
