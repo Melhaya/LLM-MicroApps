@@ -575,6 +575,14 @@ def main(config):
         if st.button("Test connection", use_container_width=True):
             with st.spinner("Testing connection..."):
                 ok, message = test_llm_connection(selected_llm, SYSTEM_PROMPT)
+
+            # Save status in session_state for the badge
+            st.session_state["connection_status"] = {
+                "ok": ok,
+                "message": message,
+                "model": selected_llm,
+            }
+
             if ok:
                 st.success("Connection successful ✅")
             else:
@@ -616,6 +624,21 @@ def main(config):
     # Main content rendering
     if 'CURRENT_PHASE' not in st.session_state:
         st.session_state['CURRENT_PHASE'] = 0
+
+    # --- Connection status badge ---
+    status = st.session_state.get("connection_status")
+
+    if status is None:
+        st.info("🟡 **Connection status:** Not tested yet. Use *Test connection* in the sidebar.")
+    else:
+        model_name = status.get("model", "selected model")
+        if status.get("ok"):
+            st.success(f"🟢 **Connection status:** Connected to `{model_name}`.")
+        else:
+            st.error(
+                f"🔴 **Connection status:** Failed for `{model_name}`.\n\n"
+                f"Details: {status.get('message', 'Unknown error')}"
+            )
 
     st.title(APP_TITLE)
     st.markdown(APP_INTRO)
