@@ -393,6 +393,59 @@ def find_image_urls(user_input,fields):
                     image_urls.append(image_url)
     return image_urls
 
+def test_llm_connection(selected_llm, SYSTEM_PROMPT):
+    """
+    Sends a tiny test request to the selected LLM to confirm that the API key works.
+    Returns (success: bool, message: str).
+    """
+    if selected_llm not in LLM_CONFIG:
+        return False, f"Unknown model: {selected_llm}"
+
+    model_config = LLM_CONFIG[selected_llm]
+    family = model_config["family"]
+
+    # Grab whatever keys the user entered in the sidebar
+    api_keys = {
+        "openai": st.session_state.get("openai_api_key"),
+        "claude": st.session_state.get("claude_api_key"),
+        "google": st.session_state.get("google_api_key"),
+        "perplexity": st.session_state.get("perplexity_api_key"),
+    }
+
+    context = {
+        "SYSTEM_PROMPT": SYSTEM_PROMPT + "\nYou are being used to test connectivity. Reply briefly.",
+        "phase_instructions": "",
+        "user_prompt": "Connection test. Reply with a short OK.",
+        "supports_image": model_config["supports_image"],
+        "image_urls": None,
+        "model": model_config["model"],
+        "max_tokens": 10,          # keep it cheap
+        "temperature": 0.0,
+        "top_p": 1.0,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "price_input_token_1M": model_config.get("price_input_token_1M", 0.0),
+        "price_output_token_1M": model_config.get("price_output_token_1M", 0.0),
+        "TOTAL_PRICE": 0,
+        "chat_history": [],        # don’t pollute the app history
+        "api_keys": {k: v for k, v in api_keys.items() if v},
+    }
+
+    handler = HANDLERS.get(family)
+    if not handler:
+        return False, f"No handler implemented for model family '{family}'."
+
+    try:
+        response = handler(context)
+
+        # Handlers return strings; many errors already come formatted as "Unexpected error ...".
+        if isinstance(response, str) and "error" in response.lower():
+            return False, response
+
+        return True, "Model responded successfully."
+    except Exception as e:
+        return False, f"Exception while testing connection: {e}"
+
 # Main function to run the application
 def main(config):
     """
@@ -517,6 +570,15 @@ def main(config):
             "price_input_token_1M": initial_config.get("price_input_token_1M", 0.0),
             "price_output_token_1M": initial_config.get("price_output_token_1M", 0.0),
         }
+
+        # 🔹 Test connection button
+        if st.button("Test connection", use_container_width=True):
+            with st.spinner("Testing connection..."):
+                ok, message = test_llm_connection(selected_llm, SYSTEM_PROMPT)
+            if ok:
+                st.success("Connection successful ✅")
+            else:
+                st.error(f"Connection failed: {message}")
 
         st.markdown("---")
 
