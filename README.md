@@ -1,1 +1,58 @@
-# LLM-MicroApps
+# MCQ Generator 📝🤖
+
+An AI-powered **Multiple Choice Question (MCQ) Generator** built with **Streamlit**.
+
+This tool lets educators, instructional designers, and trainers quickly create **pedagogically sound MCQs** from any input text. It supports multiple LLM backends (OpenAI, Claude, Gemini, Perplexity) and lets users control difficulty via the **European Qualifications Framework (EQF)**, number of questions, distractors, feedback, hints, and output format.
+
+---
+
+## ✨ Features
+
+- 🔐 **Bring-your-own-API-key**  
+  No keys are stored in the code or repo. Each user enters their own API key in the sidebar. The app automatically validates the key before use.
+
+- 🧠 **Multiple LLM backends**
+    - OpenAI (GPT-4 family)
+    - Anthropic Claude (Coming soon)
+    - Google Gemini (Coming soon)
+    - Perplexity (Llama Sonar models) (Coming soon)
+
+  Models are configured centrally in `core_logic/llm_config.py`.
+
+- 🎯 **Difficulty via EQF levels**
+    - Question difficulty is aligned with the **European Qualifications Framework (EQF)** (levels 1–8).
+    - Lets you generate questions for anything from basic knowledge checks to advanced / higher education assessments.
+
+- ⚙️ **Flexible question configuration**
+    - Number of questions
+    - Number of correct answers per question
+    - Number and difficulty of distractors (obvious / normal / challenging)
+    - Optional learning objectives
+    - Optional hints and learner feedback
+
+- 🧾 **Multiple output formats**
+    - Plain text format
+    - Open edX **OLX** format (for LMS integration)
+
+- 🔁 **Revision workflow**
+    - Ask the AI to revise its previous answer with an additional prompt.
+    - Limits revisions per phase to avoid runaway usage.
+
+- 💬 **Chat history**
+    - The sidebar keeps track of user prompts and AI responses across phases.
+
+---
+
+## 🗂 Project Structure
+
+A minimal overview of the key files:
+
+```text
+.
+├── mcq-generator-app.py      # Entry point for the MCQ generator micro-app
+├── core_logic/
+│   ├── main.py               # Generic multi-phase Streamlit engine
+│   ├── handlers.py           # LLM family handlers (OpenAI, Claude, Gemini, Perplexity, RAG)
+│   └── llm_config.py         # Model registry and default parameters
+├── requirements.txt
+└── README.md
